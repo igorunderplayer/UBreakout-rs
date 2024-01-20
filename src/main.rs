@@ -42,38 +42,7 @@ impl EventHandler for UGame {
     fn update(&mut self, ctx: &mut Context) -> GameResult {
         self.player.position_y = ctx.gfx.window().inner_size().height as f32 - 30.0;
 
-        // Check ball collision with screen edges
-        self.ball.position_x += self.ball.direction_x * (500.0 * ctx.time.delta().as_secs_f32());
-        self.ball.position_y += self.ball.direction_y * (500.0 * ctx.time.delta().as_secs_f32());
-
-        if self.ball.position_x - self.ball.radius <= 0.0
-            || self.ball.position_x + self.ball.radius >= ctx.gfx.window().inner_size().width as f32
-        {
-            self.ball.direction_x = -self.ball.direction_x;
-        }
-
-        if self.ball.position_y - self.ball.radius <= 0.0
-            || self.ball.position_y + self.ball.radius
-                >= ctx.gfx.window().inner_size().height as f32
-        {
-            self.ball.direction_y = -self.ball.direction_y;
-        }
-        ////////////////////////////////////////////////////////////////////////
-        // Check ball collision with player
-        let is_in_x = self.ball.position_x >= self.player.position_x
-            && self.ball.position_x <= self.player.position_x + self.player.width;
-
-        if self.ball.position_y + self.ball.radius >= self.player.position_y && is_in_x {
-            self.ball.direction_y = -self.ball.direction_y;
-        }
-
-        ////////////////////////////////////////////////////////////////////////
-        // Check ball collision with enemy
-
-        let mut i = 0;
-        while i < self.enemies.len() {
-            i += 1;
-        }
+        ball::update(self, ctx);
 
         if ctx
             .keyboard
