@@ -92,7 +92,7 @@ fn main() {
 
     let (mut ctx, event_loop) = ContextBuilder::new("UGame", "igor_underplayer")
         .window_setup(ggez::conf::WindowSetup::default().title("UGame"))
-        .window_mode(ggez::conf::WindowMode::default().resizable(true))
+        .window_mode(ggez::conf::WindowMode::default().resizable(false))
         .build()
         .expect("Couldn't create ggez context");
 
