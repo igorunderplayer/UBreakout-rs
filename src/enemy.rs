@@ -7,6 +7,9 @@ pub enum EnemyTier {
     Normal,
 }
 
+pub const HEIGHT: f32 = 20.0;
+pub const WIDTH: f32 = 50.0;
+
 pub struct EnemyData {
     pub position_x: f32,
     pub position_y: f32,
@@ -27,7 +30,7 @@ pub fn draw(ctx: &mut Context, canvas: &mut Canvas, enemy: &EnemyData) {
     let enemy_mesh = graphics::Mesh::new_rectangle(
         ctx,
         graphics::DrawMode::fill(),
-        graphics::Rect::new(enemy.position_x, enemy.position_y, 50.0, 20.0),
+        graphics::Rect::new(enemy.position_x, enemy.position_y, WIDTH, HEIGHT),
         Color::WHITE,
     )
     .unwrap();

@@ -5,20 +5,32 @@ use ggez::{
 
 pub struct PlayerData {
     pub position_x: f32,
+    pub position_y: f32,
+    pub width: f32,
+    pub height: f32,
 }
 
 impl PlayerData {
     pub fn new() -> Self {
-        Self { position_x: 500.0 }
+        Self {
+            position_x: 500.0,
+            position_y: 500.0,
+            width: 100.0,
+            height: 20.0,
+        }
     }
 }
 
 pub fn draw(ctx: &mut Context, canvas: &mut Canvas, player: &PlayerData) {
-    let player_y: f32 = ctx.gfx.window().inner_size().height as f32 - 30.0;
     let player_mesh = graphics::Mesh::new_rectangle(
         ctx,
         graphics::DrawMode::fill(),
-        graphics::Rect::new(player.position_x, player_y, 50.0, 20.0),
+        graphics::Rect::new(
+            player.position_x,
+            player.position_y,
+            player.width,
+            player.height,
+        ),
         Color::WHITE,
     )
     .expect("Error creating player mesh");
