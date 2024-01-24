@@ -3,6 +3,7 @@ use ggez::{
     Context,
 };
 
+#[derive(Copy, Clone)]
 pub struct PlayerData {
     pub position_x: f32,
     pub position_y: f32,

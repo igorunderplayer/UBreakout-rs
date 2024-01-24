@@ -1,0 +1,13 @@
+{
+  "waves": [
+    {
+      "enemies": [
+        {
+          "tier": "Normal",
+          "position_x": 0.0,
+          "position_y": 0.0
+        }
+      ]
+    }
+  ]
+}

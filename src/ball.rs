@@ -3,8 +3,15 @@ use ggez::{
     Context,
 };
 
-use crate::{enemy, UGame};
+use crate::{
+    enemy::{self, EnemyData},
+    player::PlayerData,
+    UGame,
+};
 
+pub const SPEED: f32 = 200.0;
+
+#[derive(Copy, Clone)]
 pub struct BallData {
     pub radius: f32,
     pub position_x: f32,
@@ -25,99 +32,16 @@ impl BallData {
     }
 }
 
-pub fn update(game: &mut UGame, ctx: &mut Context) {
-    // Check ball collision with screen edges
-    game.ball.position_x += game.ball.direction_x * (500.0 * ctx.time.delta().as_secs_f32());
-    game.ball.position_y += game.ball.direction_y * (500.0 * ctx.time.delta().as_secs_f32());
+pub fn update(
+    ball: &mut BallData,
+    player: &mut PlayerData,
+    enemies: &mut Vec<EnemyData>,
+    ctx: &mut Context,
+) {
+    ball.position_x += ball.direction_x * (SPEED * ctx.time.delta().as_secs_f32());
+    ball.position_y += ball.direction_y * (SPEED * ctx.time.delta().as_secs_f32());
 
-    if game.ball.position_x - game.ball.radius <= 0.0
-        || game.ball.position_x + game.ball.radius >= ctx.gfx.window().inner_size().width as f32
-    {
-        game.ball.direction_x = -game.ball.direction_x;
-        return;
-    }
-
-    if game.ball.position_y - game.ball.radius <= 0.0
-        || game.ball.position_y + game.ball.radius >= ctx.gfx.window().inner_size().height as f32
-    {
-        game.ball.direction_y = -game.ball.direction_y;
-        return;
-    }
-    ////////////////////////////////////////////////////////////////////////
-    // Check ball collision with player
-    let is_in_x = game.ball.position_x >= game.player.position_x
-        && game.ball.position_x <= game.player.position_x + game.player.width;
-
-    if game.ball.position_y + game.ball.radius >= game.player.position_y && is_in_x {
-        game.ball.direction_y = -game.ball.direction_y;
-        return;
-    }
-
-    ////////////////////////////////////////////////////////////////////////
-    // Check ball collision with enemy
-
-    let mut i = 0;
-    while i < game.enemies.len() {
-        let entitie = &mut game.enemies[i];
-        let is_in_x = game.ball.position_x >= entitie.position_x
-            && game.ball.position_x <= entitie.position_x + enemy::WIDTH;
-
-        let is_in_y = game.ball.position_y >= entitie.position_y
-            && game.ball.position_y <= entitie.position_y + enemy::HEIGHT;
-
-        if is_in_x {
-            let distance_bot = f32::abs(
-                (game.ball.position_y - game.ball.radius) - (entitie.position_y + enemy::HEIGHT),
-            );
-
-            let distance_top =
-                f32::abs((game.ball.position_y + game.ball.radius) - (entitie.position_y));
-
-            if game.ball.position_y + game.ball.radius >= entitie.position_y
-                && game.ball.position_y - game.ball.radius <= entitie.position_y + enemy::HEIGHT
-            {
-                if (distance_bot < distance_top) {
-                    game.ball.direction_y = -game.ball.direction_y;
-                    println!("Hit bot");
-                    return;
-                } else {
-                    game.ball.direction_y = -game.ball.direction_y;
-                    println!("hit top");
-                    return;
-                }
-            }
-
-            // Problema: mesmo se tiver acima vai estar como se hitou top.
-            // Descobrir saber se bateu na parte de cima ou debaixo.
-
-            //let hit_top = game.ball.position_y + game.ball.radius
-        }
-
-        if is_in_y {
-            let distance_left =
-                f32::abs((game.ball.position_x + game.ball.radius) - (entitie.position_x));
-
-            let distance_right = f32::abs(
-                (game.ball.position_x - game.ball.radius) - (entitie.position_x + enemy::WIDTH),
-            );
-
-            if game.ball.position_x + game.ball.radius >= entitie.position_x
-                && game.ball.position_x - game.ball.radius <= entitie.position_x
-            {
-                if (distance_left < distance_right) {
-                    game.ball.direction_x = -game.ball.direction_x;
-                    println!("Hit righjt");
-                    return;
-                } else {
-                    game.ball.direction_x = -game.ball.direction_x;
-                    println!("hit left");
-                    return;
-                }
-            }
-        }
-
-        i += 1;
-    }
+    check_collision(ball, enemies, player, ctx);
 }
 
 pub fn draw(ctx: &mut Context, canvas: &mut Canvas, ball: &BallData) {
@@ -135,4 +59,106 @@ pub fn draw(ctx: &mut Context, canvas: &mut Canvas, ball: &BallData) {
     .expect("Couldn't create ball mesh");
 
     canvas.draw(&ball_mesh, graphics::DrawParam::default())
+}
+
+fn check_collision(
+    ball: &mut BallData,
+    enemies: &mut Vec<EnemyData>,
+    player: &mut PlayerData,
+    ctx: &mut Context,
+) {
+    ////////////////////////////////////////////////////////////////////////
+    // Check ball collision with screen edges
+    // Left edge
+    if ball.position_x - ball.radius <= 0.0 {
+        ball.direction_x = 1.0;
+    }
+    // Right edge
+    if ball.position_x + ball.radius >= ctx.gfx.window().inner_size().width as f32 {
+        ball.direction_x = -1.0;
+    }
+    // Top edge
+    if ball.position_y - ball.radius <= 0.0 {
+        ball.direction_y = 1.0;
+    }
+    // Bottom edge
+    if ball.position_y + ball.radius >= ctx.gfx.window().inner_size().height as f32 {
+        ball.direction_y = -1.0;
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////
+    // Check ball collision with player
+    let is_in_x =
+        ball.position_x >= player.position_x && ball.position_x <= player.position_x + player.width;
+
+    if ball.position_y + ball.radius >= player.position_y && is_in_x {
+        ball.direction_y = -ball.direction_y;
+        return;
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////
+    // Check ball collision with enemy
+    let mut i = 0;
+    while i < enemies.len() {
+        let entitie = &mut enemies[i];
+        let is_in_x = ball.position_x >= entitie.position_x
+            && ball.position_x <= entitie.position_x + enemy::WIDTH;
+
+        let is_in_y = ball.position_y >= entitie.position_y
+            && ball.position_y <= entitie.position_y + enemy::HEIGHT;
+
+        if is_in_x {
+            let distance_bot =
+                f32::abs((ball.position_y - ball.radius) - (entitie.position_y + enemy::HEIGHT));
+
+            let distance_top = f32::abs((ball.position_y + ball.radius) - (entitie.position_y));
+
+            if ball.position_y + ball.radius >= entitie.position_y
+                && ball.position_y - ball.radius <= entitie.position_y + enemy::HEIGHT
+            {
+                if distance_bot < distance_top {
+                    ball.direction_y = -ball.direction_y;
+                    println!("Hit bot");
+                    enemies.remove(i);
+                    return;
+                } else {
+                    ball.direction_y = -ball.direction_y;
+                    println!("hit top");
+                    enemies.remove(i);
+                    return;
+                }
+            }
+        }
+
+        if is_in_y {
+            let distance_left = f32::abs((ball.position_x + ball.radius) - (entitie.position_x));
+
+            let distance_right =
+                f32::abs((ball.position_x - ball.radius) - (entitie.position_x + enemy::WIDTH));
+
+            if ball.position_x + ball.radius >= entitie.position_x
+                && ball.position_x - ball.radius <= entitie.position_x
+            {
+                if distance_left < distance_right {
+                    ball.direction_x = -ball.direction_x;
+                    println!("Hit right");
+                    enemies.remove(i);
+                    return;
+                } else {
+                    ball.direction_x = -ball.direction_x;
+                    println!("hit left");
+                    enemies.remove(i);
+                    return;
+                }
+            }
+        }
+
+        i += 1;
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////
 }

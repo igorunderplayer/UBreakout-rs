@@ -2,7 +2,9 @@ use ggez::{
     graphics::{self, Canvas, Color},
     Context,
 };
+use serde::{Deserialize, Serialize};
 
+#[derive(Copy, Clone, Deserialize, Serialize)]
 pub enum EnemyTier {
     Normal,
 }
@@ -10,6 +12,7 @@ pub enum EnemyTier {
 pub const HEIGHT: f32 = 20.0;
 pub const WIDTH: f32 = 50.0;
 
+#[derive(Copy, Clone, Deserialize, Serialize)]
 pub struct EnemyData {
     pub position_x: f32,
     pub position_y: f32,
