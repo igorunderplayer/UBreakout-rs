@@ -6,7 +6,6 @@ use ggez::{
 use crate::{
     enemy::{self, EnemyData},
     player::PlayerData,
-    UGame,
 };
 
 pub const SPEED: f32 = 200.0;

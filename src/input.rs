@@ -1,6 +1,6 @@
 use ggez::Context;
 
-use crate::{player::PlayerData, UGame};
+use crate::player::PlayerData;
 
 pub fn update(player: &mut PlayerData, ctx: &mut Context) {
     if ctx

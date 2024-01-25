@@ -1,8 +1,10 @@
+use ggez::graphics::{self, Color};
+
 use crate::UGameState;
 
 use super::Scene;
 
-#[derive(Copy, Clone)]
+#[derive(Clone, Copy)]
 pub struct MenuScene {}
 
 impl Scene for MenuScene {
@@ -12,7 +14,7 @@ impl Scene for MenuScene {
 
     fn update(
         &mut self,
-        //scenes: &mut super::Manager,
+        scene_manager: &mut super::Manager,
         state: &mut UGameState,
         ctx: &mut ggez::Context,
     ) -> ggez::GameResult {
@@ -20,6 +22,17 @@ impl Scene for MenuScene {
     }
 
     fn draw(&mut self, state: &mut UGameState, ctx: &mut ggez::Context) -> ggez::GameResult {
-        Ok(())
+        let mut canvas = graphics::Canvas::from_frame(ctx, Color::BLACK);
+
+        let player_mesh = graphics::Mesh::new_rectangle(
+            ctx,
+            graphics::DrawMode::fill(),
+            graphics::Rect::new(30.0, 30.0, 200.0, 200.0),
+            Color::WHITE,
+        )
+        .expect("Error creating player mesh");
+
+        canvas.draw(&player_mesh, graphics::DrawParam::default());
+        canvas.finish(ctx)
     }
 }

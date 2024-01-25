@@ -33,7 +33,7 @@ impl Scene for GameScene {
 
     fn update(
         &mut self,
-        //scene: &mut super::Manager,
+        scene_manager: &mut super::Manager,
         state: &mut UGameState,
         ctx: &mut ggez::Context,
     ) -> ggez::GameResult {
