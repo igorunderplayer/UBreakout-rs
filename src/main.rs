@@ -7,7 +7,7 @@ mod enemy;
 mod input;
 mod player;
 mod scene;
-
+mod ui;
 struct UGameState {}
 
 struct UGame {
@@ -37,7 +37,11 @@ impl EventHandler for UGame {
 fn main() {
     let (mut ctx, event_loop) = ContextBuilder::new("UGame", "igor_underplayer")
         .window_setup(ggez::conf::WindowSetup::default().title("UGame"))
-        .window_mode(ggez::conf::WindowMode::default().resizable(false))
+        .window_mode(
+            ggez::conf::WindowMode::default()
+                .resizable(false)
+                .dimensions(800.0, 600.0),
+        )
         .build()
         .expect("Couldn't create ggez context");
 

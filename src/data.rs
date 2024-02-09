@@ -5,6 +5,7 @@ use crate::enemy::EnemyData;
 
 #[derive(Deserialize, Serialize, Clone)]
 pub struct LevelData {
+    pub name: String,
     pub waves: Vec<WaveData>,
 }
 

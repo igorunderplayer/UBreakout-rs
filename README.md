@@ -1,6 +1,8 @@
 # UBreakout-rs
 
-**UBreakout-rs** is a learning purpose project. It is a simple game written in Rust with `ggez` library.
+**UBreakout-rs** is a learning purpose project. It is a simple game written in Rust with [`ggez`](https://github.com/ggez/ggez) library.
+
+## To-do
 
 - [ ] Scene management system
 - [ ] Each scene have its own `draw` and `update` methods.

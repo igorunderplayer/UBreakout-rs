@@ -4,8 +4,8 @@ use crate::UGameState;
 
 use self::{game::GameScene, menu::MenuScene};
 
-mod game;
-mod menu;
+pub mod game;
+pub mod menu;
 
 pub trait Scene {
     fn new(ctx: &mut Context) -> Self;
@@ -33,16 +33,13 @@ pub struct Manager {
 impl Manager {
     pub fn new(ctx: &mut Context) -> Self {
         Self {
-            actual_scene: Scenes::Game,
+            actual_scene: Scenes::Menu,
             menu_scene: MenuScene::new(ctx),
             game_scene: GameScene::new(ctx),
         }
     }
 
-    pub fn set_scene(&mut self, ctx: &mut Context, scene: Scenes) {
-        // let scene = Scenes::Menu(MenuScene::new(self, ctx));
-        // self.actual_scene = scene;
-    }
+    pub fn set_scene(&mut self, ctx: &mut Context, scene: Scenes) {}
 
     pub fn update(&mut self, state: &mut UGameState, ctx: &mut Context) -> GameResult {
         let mut menu_scene = self.menu_scene.clone();
