@@ -1,3 +1,4 @@
+use data::LevelData;
 use ggez::event::EventHandler;
 use ggez::{event, Context, ContextBuilder, GameResult};
 
@@ -8,7 +9,10 @@ mod input;
 mod player;
 mod scene;
 mod ui;
-struct UGameState {}
+
+struct UGameState {
+    level: Option<LevelData>,
+}
 
 struct UGame {
     scenes: scene::Manager,
@@ -17,9 +21,10 @@ struct UGame {
 
 impl UGame {
     pub fn new(ctx: &mut Context) -> Self {
+        let mut state = UGameState { level: None };
         Self {
-            scenes: scene::Manager::new(ctx),
-            state: UGameState {},
+            scenes: scene::Manager::new(ctx, &mut state),
+            state,
         }
     }
 }

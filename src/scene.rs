@@ -8,13 +8,14 @@ pub mod game;
 pub mod menu;
 
 pub trait Scene {
-    fn new(ctx: &mut Context) -> Self;
+    fn new(ctx: &mut Context, state: &mut UGameState) -> Self;
     fn update(
         &mut self,
         scene_manager: &mut Manager,
         state: &mut UGameState,
         ctx: &mut Context,
     ) -> GameResult;
+    fn on_create(&mut self, state: &mut UGameState) -> GameResult;
     fn draw(&mut self, state: &mut UGameState, ctx: &mut Context) -> GameResult;
 }
 
@@ -31,15 +32,29 @@ pub struct Manager {
 }
 
 impl Manager {
-    pub fn new(ctx: &mut Context) -> Self {
+    pub fn new(ctx: &mut Context, state: &mut UGameState) -> Self {
         Self {
             actual_scene: Scenes::Menu,
-            menu_scene: MenuScene::new(ctx),
-            game_scene: GameScene::new(ctx),
+            menu_scene: MenuScene::new(ctx, state),
+            game_scene: GameScene::new(ctx, state),
         }
     }
 
-    pub fn set_scene(&mut self, ctx: &mut Context, scene: Scenes) {}
+    pub fn set_scene(&mut self, ctx: &mut Context, state: &mut UGameState, scene: Scenes) {
+        match &scene {
+            Scenes::Game => {
+                let _ = self.game_scene.on_create(state);
+            }
+
+            Scenes::Menu => {
+                let _ = self.menu_scene.on_create(state);
+            }
+
+            Scenes::None => {}
+        }
+
+        self.actual_scene = scene;
+    }
 
     pub fn update(&mut self, state: &mut UGameState, ctx: &mut Context) -> GameResult {
         let mut menu_scene = self.menu_scene.clone();

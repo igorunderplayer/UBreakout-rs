@@ -1,4 +1,7 @@
-use std::fs::{self, File};
+use std::{
+    fs::{self, DirEntry, File},
+    path::PathBuf,
+};
 
 use ggez::graphics::{self, Color, TextLayout};
 
@@ -11,45 +14,61 @@ use crate::{
 use super::Scene;
 
 #[derive(Clone)]
+struct LevelDataWithPath {
+    path: String,
+    data: LevelData,
+}
+
+#[derive(Clone)]
 pub struct MenuScene {
-    levels: Vec<LevelData>,
+    levels: Vec<LevelDataWithPath>,
     ui: ui::Manager,
 }
 
 impl Scene for MenuScene {
-    fn new(_ctx: &mut ggez::Context) -> Self {
+    fn new(_ctx: &mut ggez::Context, _state: &mut UGameState) -> Self {
         let files = match fs::read_dir("./levels") {
             Ok(v) => v,
             _ => {
                 let _ = fs::create_dir("./levels");
                 fs::read_dir("./levels").unwrap()
             }
-        };
+        }
+        .map(|f| f.unwrap().path());
 
-        let levels: Vec<LevelData> = files
+        let levels: Vec<LevelDataWithPath> = files
             .map(|dir_entry| {
-                let string = fs::read_to_string(dir_entry.unwrap().path()).unwrap();
-                data::load_from_json(&string)
+                let string = fs::read_to_string(&dir_entry).unwrap();
+                let data = data::load_from_json(&string);
+
+                LevelDataWithPath {
+                    path: dir_entry.to_str().unwrap().to_owned(),
+                    data,
+                }
             })
             .collect();
 
         let mut ui = ui::Manager::new();
 
-        let mut i: f32 = 0.0;
+        let mut i: usize = 0;
         for level in &levels {
             ui.buttons.push(button::Button::new(
-                format!("level-{}-{}", i, level.name),
-                level.name.clone(),
+                format!("level-{}-{}", level.path, level.data.name),
+                level.data.name.clone(),
                 300.0,
-                30.0 + (i * 70.0),
+                30.0 + (i * 70) as f32,
                 200.0,
                 60.0,
             ));
 
-            i += 1.0;
+            i += 1;
         }
 
-        Self { levels, ui }
+        Self { levels: levels, ui }
+    }
+
+    fn on_create(&mut self, state: &mut UGameState) -> ggez::GameResult {
+        Ok(())
     }
 
     fn update(
@@ -61,7 +80,24 @@ impl Scene for MenuScene {
         self.ui.update(state, ctx);
 
         for button in &self.ui.buttons {
-            if button.pressed {}
+            let button_data: Vec<&str> = button.id.split("-").collect();
+
+            if button.pressed {
+                match button_data[0] {
+                    "level" => {
+                        println!("Button data: {}", button_data[1]);
+
+                        let level_path = button_data[1];
+                        let string = fs::read_to_string(&level_path).unwrap();
+                        println!("Level stirng: {}", string);
+                        let data = data::load_from_json(&string);
+
+                        state.level = Some(data);
+                        scene_manager.set_scene(ctx, state, super::Scenes::Game)
+                    }
+                    _ => {}
+                }
+            }
         }
         Ok(())
     }

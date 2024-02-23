@@ -19,9 +19,8 @@ pub struct GameScene {
 }
 
 impl Scene for GameScene {
-    fn new(_ctx: &mut ggez::Context) -> Self {
+    fn new(_ctx: &mut ggez::Context, state: &mut UGameState) -> Self {
         let json_string = include_str!("../level1.json");
-
         let coisa = data::load_from_json(json_string);
         Self {
             player: PlayerData::new(),
@@ -31,6 +30,14 @@ impl Scene for GameScene {
         }
     }
 
+    fn on_create(&mut self, state: &mut UGameState) -> ggez::GameResult {
+        if let Some(level) = &state.level {
+            println!("Starting dynamic level");
+
+            self.level = level.clone()
+        }
+        Ok(())
+    }
     fn update(
         &mut self,
         scene_manager: &mut super::Manager,
