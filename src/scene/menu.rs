@@ -1,9 +1,11 @@
 use std::{
+    env,
     fs::{self, DirEntry, File},
-    path::PathBuf,
+    path::{Path, PathBuf},
 };
 
 use ggez::graphics::{self, Color, TextLayout};
+use homedir::get_my_home;
 
 use crate::{
     data::{self, LevelData},
@@ -11,7 +13,7 @@ use crate::{
     UGameState,
 };
 
-use super::Scene;
+use super::{game, Scene};
 
 #[derive(Clone)]
 struct LevelDataWithPath {
@@ -27,7 +29,23 @@ pub struct MenuScene {
 
 impl Scene for MenuScene {
     fn new(_ctx: &mut ggez::Context, _state: &mut UGameState) -> Self {
-        let files = match fs::read_dir("./levels") {
+        let ui = ui::Manager::new();
+        let levels = Vec::new();
+
+        Self { levels, ui }
+    }
+
+    fn on_create(&mut self, state: &mut UGameState) -> ggez::GameResult {
+        self.levels.clear();
+        self.ui = ui::Manager::new();
+
+        let game_dir = get_my_home().unwrap().unwrap().join(".ubreakoutrs");
+        let levels_directory = game_dir.join("levels");
+
+        fs::create_dir_all(&game_dir).unwrap();
+        fs::create_dir_all(&levels_directory).unwrap();
+
+        let files = match fs::read_dir(levels_directory) {
             Ok(v) => v,
             _ => {
                 let _ = fs::create_dir("./levels");
@@ -36,7 +54,7 @@ impl Scene for MenuScene {
         }
         .map(|f| f.unwrap().path());
 
-        let levels: Vec<LevelDataWithPath> = files
+        self.levels = files
             .map(|dir_entry| {
                 let string = fs::read_to_string(&dir_entry).unwrap();
                 let data = data::load_from_json(&string);
@@ -48,11 +66,9 @@ impl Scene for MenuScene {
             })
             .collect();
 
-        let mut ui = ui::Manager::new();
-
         let mut i: usize = 0;
-        for level in &levels {
-            ui.buttons.push(button::Button::new(
+        for level in &self.levels {
+            self.ui.buttons.push(button::Button::new(
                 format!("level-{}-{}", level.path, level.data.name),
                 level.data.name.clone(),
                 300.0,
@@ -63,11 +79,6 @@ impl Scene for MenuScene {
 
             i += 1;
         }
-
-        Self { levels: levels, ui }
-    }
-
-    fn on_create(&mut self, state: &mut UGameState) -> ggez::GameResult {
         Ok(())
     }
 
@@ -89,7 +100,7 @@ impl Scene for MenuScene {
 
                         let level_path = button_data[1];
                         let string = fs::read_to_string(&level_path).unwrap();
-                        println!("Level stirng: {}", string);
+                        println!("Level strinng: {}", string);
                         let data = data::load_from_json(&string);
 
                         state.level = Some(data);
@@ -105,6 +116,20 @@ impl Scene for MenuScene {
     fn draw(&mut self, state: &mut UGameState, ctx: &mut ggez::Context) -> ggez::GameResult {
         let mut canvas = graphics::Canvas::from_frame(ctx, Color::BLACK);
         self.ui.draw(&mut canvas, ctx);
+
+        if self.levels.is_empty() {
+            let game_dir = get_my_home()
+                .unwrap()
+                .unwrap()
+                .join(".ubreakoutrs")
+                .join("levels");
+
+            let alert_text = graphics::Text::new(format!(
+                "No level data found, you can place them in the directory: {}",
+                game_dir.to_str().unwrap()
+            ));
+            canvas.draw(&alert_text, graphics::DrawParam::default());
+        }
         canvas.finish(ctx)
     }
 }

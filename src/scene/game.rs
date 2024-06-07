@@ -20,12 +20,12 @@ pub struct GameScene {
 
 impl Scene for GameScene {
     fn new(_ctx: &mut ggez::Context, state: &mut UGameState) -> Self {
-        let json_string = include_str!("../level1.json");
-        let coisa = data::load_from_json(json_string);
+        let json_string = include_str!("../fallback_level.json");
+        let data = data::load_from_json(json_string);
         Self {
             player: PlayerData::new(),
             ball: BallData::new(),
-            level: coisa,
+            level: data,
             actual_wave: 0,
         }
     }

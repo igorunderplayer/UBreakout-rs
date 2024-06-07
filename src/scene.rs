@@ -33,11 +33,15 @@ pub struct Manager {
 
 impl Manager {
     pub fn new(ctx: &mut Context, state: &mut UGameState) -> Self {
-        Self {
-            actual_scene: Scenes::Menu,
+        let mut instance = Self {
+            actual_scene: Scenes::None,
             menu_scene: MenuScene::new(ctx, state),
             game_scene: GameScene::new(ctx, state),
-        }
+        };
+
+        instance.set_scene(ctx, state, Scenes::Menu);
+
+        instance
     }
 
     pub fn set_scene(&mut self, ctx: &mut Context, state: &mut UGameState, scene: Scenes) {

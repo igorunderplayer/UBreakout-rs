@@ -1,0 +1,269 @@
+{
+  "name": "Sample 3",
+  "waves": [
+    {
+      "enemies": [
+        {
+          "tier": "Normal",
+          "position_x": 20.0,
+          "position_y": 0.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 80.0,
+          "position_y": 0.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 140.0,
+          "position_y": 0.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 200.0,
+          "position_y": 0.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 260.0,
+          "position_y": 0.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 320.0,
+          "position_y": 0.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 380.0,
+          "position_y": 0.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 440.0,
+          "position_y": 0.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 500.0,
+          "position_y": 0.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 560.0,
+          "position_y": 0.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 620.0,
+          "position_y": 0.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 680.0,
+          "position_y": 0.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 740.0,
+          "position_y": 0.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 20.0,
+          "position_y": 40.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 80.0,
+          "position_y": 40.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 140.0,
+          "position_y": 40.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 200.0,
+          "position_y": 40.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 260.0,
+          "position_y": 40.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 320.0,
+          "position_y": 40.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 380.0,
+          "position_y": 40.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 440.0,
+          "position_y": 40.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 500.0,
+          "position_y": 40.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 560.0,
+          "position_y": 40.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 620.0,
+          "position_y": 40.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 680.0,
+          "position_y": 40.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 740.0,
+          "position_y": 40.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 20.0,
+          "position_y": 80.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 80.0,
+          "position_y": 80.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 140.0,
+          "position_y": 80.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 200.0,
+          "position_y": 80.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 260.0,
+          "position_y": 80.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 320.0,
+          "position_y": 80.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 380.0,
+          "position_y": 80.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 440.0,
+          "position_y": 80.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 500.0,
+          "position_y": 80.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 560.0,
+          "position_y": 80.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 620.0,
+          "position_y": 80.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 680.0,
+          "position_y": 80.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 740.0,
+          "position_y": 80.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 20.0,
+          "position_y": 120.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 80.0,
+          "position_y": 120.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 140.0,
+          "position_y": 120.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 200.0,
+          "position_y": 120.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 260.0,
+          "position_y": 120.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 320.0,
+          "position_y": 120.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 380.0,
+          "position_y": 120.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 440.0,
+          "position_y": 120.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 500.0,
+          "position_y": 120.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 560.0,
+          "position_y": 120.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 620.0,
+          "position_y": 120.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 680.0,
+          "position_y": 120.0
+        },
+        {
+          "tier": "Normal",
+          "position_x": 740.0,
+          "position_y": 120.0
+        }
+      ]
+    }
+  ]
+}
