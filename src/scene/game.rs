@@ -72,7 +72,10 @@ impl Scene for GameScene {
         {
             let fps = ctx.time.fps();
             let fps_text = graphics::Text::new(format!("FPS: {}", fps));
-            canvas.draw(&fps_text, graphics::DrawParam::default());
+            canvas.draw(
+                &fps_text,
+                graphics::DrawParam::default().color(Color::MAGENTA),
+            );
         }
 
         canvas.finish(ctx)
